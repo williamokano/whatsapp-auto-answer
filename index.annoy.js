@@ -1,6 +1,5 @@
 (function() {
     const ONE_SECOND = 1000
-    const TWO_SECONDS = ONE_SECOND * 2
     const InputEvent = window.Event || window.InputEvent
     
     const executeFirstReturnSecond = (callback, returnedValue) => { callback(); return returnedValue; }
