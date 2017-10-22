@@ -15,9 +15,12 @@
     const getLastMessage = () => document.querySelector('#main > .pane-body > .copyable-area > .pane-chat-msgs .msg:last-child > .message')
     const lastMessageContainsMessageIn = () => getLastMessage().classList.contains('message-in')
     const getTextBox = () => document.querySelector('#main > footer > div.block-compose > div.input-container > div.pluggable-input.pluggable-input-compose > div.pluggable-input-body.copyable-text.selectable-text')
+    const lastMessageEmoji = () => getLastMessage().querySelector('.emojitext') || getLastMessage().querySelector('.large-emoji-container')
+    const repeatLastMessageWithEmoji = () => lastMessageEmoji() && Array.prototype.reduce.call(lastMessageEmoji().querySelectorAll('img'), (acc, curr) => acc.concat(curr.getAttribute('alt')), '')
     const executeAfterOneSecond = callback => setTimeout(callback, ONE_SECOND)
     const getNewInputEvent = () => new InputEvent('input', {bubbles: true})
-    const sendMessage = () => document.querySelector("button.compose-btn-send").click()
+    const getSendButton = () => document.querySelector("button.compose-btn-send")
+    const sendMessage = () => getSendButton() ? getSendButton().click() : null
     const setTextboxMessage = (message) => {
         const textBox = getTextBox()
         textBox.textContent = message
@@ -32,7 +35,8 @@
     .forEach(chat => {
         executeAfterOneSecond(() => {
             if (lastMessageContainsMessageIn()) {
-                setTextboxMessage(answer)
+                const message = repeatLastMessageWithEmoji() || answer
+                setTextboxMessage(message)
                 sendMessage()
             }
         })
